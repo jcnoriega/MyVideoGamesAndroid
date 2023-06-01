@@ -10,10 +10,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.myvideogames.databinding.ActivityMainBinding
+import com.example.myvideogames.ui.MediaPlayerFragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var mediaPlayerFragment = MediaPlayerFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +39,14 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        setupMediaPlayerFragment()
+    }
+
+    private fun setupMediaPlayerFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.player_fragment, mediaPlayerFragment, MediaPlayerFragment.TAG)
+            .commitAllowingStateLoss()
     }
 }
