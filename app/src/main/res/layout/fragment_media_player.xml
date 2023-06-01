@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.example.myvideogames.ui.PlayerScreenMotionLayout
+    <com.example.myvideogames.ui.MediaPlayerMotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
@@ -191,5 +191,5 @@
             app:layout_constraintTop_toTopOf="@+id/play_pause_layout"
             app:srcCompat="@drawable/next"
             app:tint="@color/white"/>
-    </com.example.myvideogames.ui.PlayerScreenMotionLayout>
+    </com.example.myvideogames.ui.MediaPlayerMotionLayout>
 </layout>

@@ -17,10 +17,10 @@ import com.example.myvideogames.R
  * based on user touch. The player with the white background is what is resized, but this
  * PlayerScreenMotionLayout always takes up the entire screen.
  * So when you touch the Fragment when the player is minimized, you are actually touching this layout.
- * We calculate whether the touch is on the Mini player or not and based on that we pass the toucch to
+ * We calculate whether the touch is on the Mini player or not and based on that we pass the touch to
  * parent or consume it
  */
-class PlayerScreenMotionLayout(
+class MediaPlayerMotionLayout(
     context: Context,
     attributeSet: AttributeSet? = null
 ) : MotionLayout(context, attributeSet) {
