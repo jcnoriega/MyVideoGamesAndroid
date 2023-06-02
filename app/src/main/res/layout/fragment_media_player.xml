@@ -13,7 +13,7 @@
             android:id="@+id/player_background_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="@color/material_dynamic_neutral50"
+            app:cardBackgroundColor="@color/black"
             app:cardCornerRadius="0dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
