@@ -2,20 +2,17 @@ package com.example.myvideogames.ui.home
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.example.myvideogames.databinding.FragmentHomeBinding
+import com.example.myvideogames.header
 import com.example.myvideogames.simpleItem
-import com.google.android.material.appbar.AppBarLayout
+import com.example.myvideogames.ui.helpers.carouselBuilder
 import kotlin.math.abs
 
 
@@ -33,7 +30,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,50 +37,95 @@ class HomeFragment : Fragment() {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val recyclerView: EpoxyRecyclerView = binding.homeEpoxyRecyclerView
 
+        setUpHeaderView()
+
+        val recyclerView: EpoxyRecyclerView = binding.homeEpoxyRecyclerView
         recyclerView.withModels {
-            for (i in 1 until 11) {
-                simpleItem {
-                    id("item{$i}")
-                    text("Number $i")
+            header {
+                id("header_latest")
+                title("Latest Releases")
+            }
+            carouselBuilder {
+                id("carousel_latest")
+                for (i in 1 until 11) {
+                    simpleItem {
+                        id("item{$i}")
+                        text("Number $i")
+                    }
+                }
+            }
+            header {
+                id("header_upcoming")
+                title("Upcoming")
+            }
+            carouselBuilder {
+                id("carousel_upcoming")
+                for (i in 1 until 11) {
+                    simpleItem {
+                        id("item{$i}")
+                        text("Number $i")
+                    }
+                }
+            }
+            header {
+                id("top")
+                title("Top 10")
+            }
+            carouselBuilder {
+                id("carousel_top")
+                for (i in 1 until 11) {
+                    simpleItem {
+                        id("item{$i}")
+                        text("Number $i")
+                    }
+                }
+            }
+            header {
+                id("favourites_header")
+                title("Favourites")
+            }
+            carouselBuilder {
+                id("carousel_favourites")
+                for (i in 1 until 11) {
+                    simpleItem {
+                        id("item{$i}")
+                        text("Number $i")
+                    }
                 }
             }
         }
-        binding.scrollView.setOnTouchListener { _, _ ->  true}
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object: OnGlobalLayoutListener {
+
+        return binding.root
+    }
+
+    private fun setUpHeaderView() {
+        binding.scrollView.setOnTouchListener { _, _ -> true }
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val displayMetrics = DisplayMetrics()
                 requireActivity().windowManager.defaultDisplay.getRealMetrics(displayMetrics)
                 val widthScreen = displayMetrics.widthPixels
-                val widthScroll = binding.headerImage.width/2
-                Log.e(TAG, "screen = $widthScreen, widthScroll = $widthScroll")
-                binding.scrollView.scrollTo(widthScroll - (widthScreen/2), 0)
+                val widthScroll = binding.headerImage.width / 2
+                binding.scrollView.scrollTo(widthScroll - (widthScreen / 2), 0)
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
 
         binding.appBar.addOnOffsetChangedListener { _, verticalOffset ->
+            //TODO: check 175 value
             val minimumHeight = convertDpToPixel(175f) + binding.toolbar.height
             val scrollRange = binding.headerImage.height
-            val delta = 1.0f - abs(verticalOffset).toFloat() / (scrollRange - minimumHeight)
-            val scalingFactor = 0.2f + delta * 0.8f
-            val scrollOffset = scrollRange + verticalOffset
             val deltaY = 1 - (abs(verticalOffset).toFloat()) / scrollRange
-            val translateY = -(verticalOffset).toFloat()*0.5f//+ minimumHeight*0.5f
-            Log.e(TAG, "VerticalOffset: $verticalOffset, minimumHeight=$minimumHeight, scrollOffset: $scrollOffset, deltaY:$deltaY, translateY = $translateY")
+            val translateY = -(verticalOffset).toFloat() * 0.5f
             if (scrollRange + verticalOffset >= minimumHeight.toInt()) {
                 binding.headerImage.scaleY = deltaY
                 binding.headerImage.scaleX = deltaY
-                binding.headerImage.translationY = translateY//delta * 0.5f * abs(verticalOffset)
+                binding.headerImage.translationY = translateY
             } else {
                 binding.headerImage.scaleY = minimumHeight / scrollRange
             }
-                //0.2f + delta * 0.8f
-            //binding.headerImage.scaleY = 0.2f + delta * 0.8f
-
         }
-        return binding.root
     }
 
     private fun convertDpToPixel(dp: Float): Float {
