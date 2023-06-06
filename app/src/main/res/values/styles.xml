@@ -3,4 +3,7 @@
     <style name="rounded_corner">
         <item name="cornerSize">8dp</item>
     </style>
+    <style name="collapsing_toolbar_title">
+        <item name="fontFamily">sans-serif-black</item>
+    </style>
 </resources>

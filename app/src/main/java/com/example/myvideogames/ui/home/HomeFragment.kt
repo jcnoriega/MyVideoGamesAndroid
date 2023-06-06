@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
 import com.bumptech.glide.Glide
@@ -57,9 +58,13 @@ class HomeFragment : Fragment() {
                 requestManager.asBitmap().apply(options).load(model.imageUrl)
             }
         )
+        controller.onGameSelected = {
+            val directions = HomeFragmentDirections.actionNavigationHomeToGameDetailFragment(it)
+            findNavController().navigate(directions)
+        }
 
         viewModel.games.observe(viewLifecycleOwner) {
-            controller.games = it
+            controller.setData(it)
         }
 
         return binding.root

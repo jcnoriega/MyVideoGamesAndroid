@@ -20,7 +20,7 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
-                    gamesService.getGames("released")
+                    gamesService.getGames()
                 }
                 _games.value = result.results
             } catch (e: Exception) {
