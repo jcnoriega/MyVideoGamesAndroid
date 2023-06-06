@@ -13,7 +13,7 @@ import retrofit2.http.Query
 interface RAWGamesService {
 
     @GET(value = "games")
-    suspend fun getGames(): PagedResponse<Game>
+    suspend fun getGames(@Query("ordering") order: String? = null): PagedResponse<Game>
 
     companion object {
         private const val API_KEY = "33684e37ce134b6a8015bdb047c27c6c"
