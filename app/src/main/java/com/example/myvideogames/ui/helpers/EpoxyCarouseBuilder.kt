@@ -1,5 +1,6 @@
 package com.example.myvideogames.ui.helpers
 
+import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.EpoxyModel
@@ -21,6 +22,7 @@ import com.airbnb.epoxy.ModelCollector
  * @link https://github.com/airbnb/epoxy/issues/847
  */
 fun ModelCollector.carouselBuilder(builder: EpoxyCarouselBuilder.() -> Unit): CarouselModel_ {
+    Carousel.setDefaultGlobalSnapHelperFactory(null)
     val carouselBuilder = EpoxyCarouselBuilder().apply { builder() }
     add(carouselBuilder.carouselModel)
     return carouselBuilder.carouselModel

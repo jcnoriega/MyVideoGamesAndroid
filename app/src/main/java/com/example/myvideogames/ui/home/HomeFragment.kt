@@ -8,14 +8,18 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.airbnb.epoxy.EpoxyRecyclerView
+import com.airbnb.epoxy.addGlidePreloader
+import com.airbnb.epoxy.glidePreloader
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.myvideogames.databinding.FragmentHomeBinding
-import com.example.myvideogames.header
-import com.example.myvideogames.simpleItem
-import com.example.myvideogames.ui.helpers.carouselBuilder
+import com.example.myvideogames.ui.SimpleGameItem_
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     companion object {
@@ -24,6 +28,8 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val viewModel: HomeViewModel by viewModels()
+    private val controller by lazy { HomeFeedEpoxyController() }
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -40,60 +46,20 @@ class HomeFragment : Fragment() {
 
         setUpHeaderView()
 
-        val recyclerView: EpoxyRecyclerView = binding.homeEpoxyRecyclerView
-        recyclerView.withModels {
-            header {
-                id("header_latest")
-                title("Latest Releases")
+        val recyclerView = binding.homeEpoxyRecyclerView
+        recyclerView.setController(controller)
+        recyclerView.addGlidePreloader(
+            requestManager = Glide.with(requireContext()),
+            preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->
+                val options = RequestOptions
+                    .diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC)
+                    .dontAnimate()
+                requestManager.asBitmap().apply(options).load(model.imageUrl)
             }
-            carouselBuilder {
-                id("carousel_latest")
-                for (i in 1 until 11) {
-                    simpleItem {
-                        id("item{$i}")
-                        text("Number $i")
-                    }
-                }
-            }
-            header {
-                id("header_upcoming")
-                title("Upcoming")
-            }
-            carouselBuilder {
-                id("carousel_upcoming")
-                for (i in 1 until 11) {
-                    simpleItem {
-                        id("item{$i}")
-                        text("Number $i")
-                    }
-                }
-            }
-            header {
-                id("top")
-                title("Top 10")
-            }
-            carouselBuilder {
-                id("carousel_top")
-                for (i in 1 until 11) {
-                    simpleItem {
-                        id("item{$i}")
-                        text("Number $i")
-                    }
-                }
-            }
-            header {
-                id("favourites_header")
-                title("Favourites")
-            }
-            carouselBuilder {
-                id("carousel_favourites")
-                for (i in 1 until 11) {
-                    simpleItem {
-                        id("item{$i}")
-                        text("Number $i")
-                    }
-                }
-            }
+        )
+
+        viewModel.games.observe(viewLifecycleOwner) {
+            controller.games = it
         }
 
         return binding.root
