@@ -31,18 +31,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
+                app:collapsedTitleTextAppearance="@style/collapsing_toolbar_title"
+                app:collapsedTitleTextColor="@color/white"
                 app:contentScrim="@color/black"
-                app:titleCollapseMode="scale"
+                app:expandedTitleMarginBottom="16dp"
+                app:expandedTitleMarginStart="16dp"
                 app:expandedTitleTextAppearance="@style/collapsing_toolbar_title"
                 app:expandedTitleTextColor="@color/white"
-                app:expandedTitleMarginStart="16dp"
-                app:expandedTitleMarginBottom="16dp"
-                app:collapsedTitleTextColor="@color/white"
-                app:collapsedTitleTextAppearance="@style/collapsing_toolbar_title"
-                app:title="@{name}"
-                tools:title="Grand Theft Auto"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                >
+                app:title="@{name}"
+                app:titleCollapseMode="scale"
+                tools:title="Grand Theft Auto">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/game_detail_logo"
@@ -56,22 +55,17 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin" >
-                </androidx.appcompat.widget.Toolbar>
+                    app:layout_collapseMode="pin" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/game_detail_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@{description}"
-                tools:text="Grand Theft Auto" />
-        </androidx.core.widget.NestedScrollView>
+            android:background="@color/white"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:listitem="@layout/home_simple_item" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

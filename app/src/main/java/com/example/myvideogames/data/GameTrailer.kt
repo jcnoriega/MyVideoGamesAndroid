@@ -6,7 +6,11 @@ data class GameTrailer(
     val id: Int,
     val name: String,
     val preview: String,
-    @SerializedName("480")
-    val small: String? = null,
-    val max: String? = null
-)
+    val data: GameTrailerData
+) {
+    data class GameTrailerData(
+        @SerializedName("480")
+        val small: String? = null,
+        val max: String? = null
+    )
+}

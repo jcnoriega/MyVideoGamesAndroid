@@ -1,6 +1,5 @@
 package com.example.myvideogames.ui.home
 
-import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 import com.example.myvideogames.data.Game
 import com.example.myvideogames.header
