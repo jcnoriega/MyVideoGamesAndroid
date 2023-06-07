@@ -1,12 +1,12 @@
 package com.example.myvideogames.ui.gamedetail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
@@ -15,9 +15,8 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.myvideogames.databinding.FragmentGameDetailBinding
-import com.example.myvideogames.databinding.FragmentHomeBinding
 import com.example.myvideogames.ui.SimpleGameItem_
-import com.example.myvideogames.ui.home.HomeFragmentDirections
+import com.example.myvideogames.ui.mediaplayer.MediaPlayerContainerListener
 
 class GameDetailFragment : Fragment() {
 
@@ -27,6 +26,8 @@ class GameDetailFragment : Fragment() {
 
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var mediaPlayerContainerListener: MediaPlayerContainerListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +54,7 @@ class GameDetailFragment : Fragment() {
             }
         )
         controller.onGameSelected = {
-//            val directions = HomeFragmentDirections.actionNavigationHomeToGameDetailFragment(it)
-//            findNavController().navigate(directions)
+            mediaPlayerContainerListener.launchMediaPlayer(it)
         }
 
         viewModel.gameTrailers.observe(viewLifecycleOwner) {
@@ -62,6 +62,11 @@ class GameDetailFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mediaPlayerContainerListener = requireActivity() as MediaPlayerContainerListener
     }
 
 }

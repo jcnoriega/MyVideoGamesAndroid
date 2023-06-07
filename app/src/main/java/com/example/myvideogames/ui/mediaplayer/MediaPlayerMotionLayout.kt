@@ -1,4 +1,4 @@
-package com.example.myvideogames.ui
+package com.example.myvideogames.ui.mediaplayer
 
 import android.content.Context
 import android.graphics.Rect

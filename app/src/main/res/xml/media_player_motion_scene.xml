@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
     <Transition
-        motion:constraintSetEnd="@id/play_screen_expanded_normal"
-        motion:constraintSetStart="@id/play_screen_minimized"
+        motion:constraintSetStart="@id/play_screen_expanded_normal"
+        motion:constraintSetEnd="@id/play_screen_minimized"
         motion:duration="300"
         app:motionInterpolator="easeInOut">
         <OnSwipe

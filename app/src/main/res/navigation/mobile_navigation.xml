@@ -34,5 +34,12 @@
         <argument
             android:name="game"
             app:argType="com.example.myvideogames.data.Game" />
+        <action
+            android:id="@+id/action_gameDetailFragment_to_mediaPlayerFragment2"
+            app:destination="@id/mediaPlayerFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/mediaPlayerFragment2"
+        android:name="com.example.myvideogames.ui.mediaplayer.MediaPlayerFragment"
+        android:label="MediaPlayerFragment" />
 </navigation>

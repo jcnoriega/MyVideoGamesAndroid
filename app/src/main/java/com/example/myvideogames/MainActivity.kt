@@ -1,23 +1,34 @@
 package com.example.myvideogames
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.core.view.ViewCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.myvideogames.data.GameTrailer
 import com.example.myvideogames.databinding.ActivityMainBinding
-import com.example.myvideogames.ui.MediaPlayerFragment
+import com.example.myvideogames.ui.mediaplayer.MediaPlayerContainerListener
+import com.example.myvideogames.ui.mediaplayer.MediaPlayerFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
 
     private lateinit var binding: ActivityMainBinding
     private var mediaPlayerFragment = MediaPlayerFragment.newInstance()
+
+    private val onBackPressedCallback = object: OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            viewModel.onBackPressed()
+        }
+    }
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +52,39 @@ class MainActivity : AppCompatActivity() {
         )
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        setupMediaPlayerFragment()
+        observeTransition()
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    private fun setupMediaPlayerFragment() {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.player_fragment, mediaPlayerFragment, MediaPlayerFragment.TAG)
-            .commitAllowingStateLoss()
+    private fun observeTransition() {
+        viewModel.transitionProgress.observe(this) {
+            val motionLayout = binding.container
+            if (ViewCompat.isLaidOut(motionLayout)) {
+                motionLayout.progress = 1f - it
+            } else {
+                motionLayout.post { motionLayout.progress = 1f - it }
+            }
+        }
+        viewModel.collapsed.observe(this) { isCollapsed ->
+            onBackPressedCallback.isEnabled = !isCollapsed //we disable it is collapsed
+        }
+    }
+
+    override fun launchMediaPlayer(gameTrailer: GameTrailer) {
+        val fragment = supportFragmentManager.findFragmentByTag(MediaPlayerFragment.TAG)
+        if (fragment == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.player_fragment, mediaPlayerFragment, MediaPlayerFragment.TAG)
+                .commitAllowingStateLoss()
+        }
+        viewModel.setMediaSource(gameTrailer)
+        onBackPressedCallback.isEnabled = true
+        val motionLayout = binding.container
+        if (ViewCompat.isLaidOut(motionLayout)) {
+            motionLayout.transitionToEnd()
+        } else {
+            motionLayout.post { motionLayout.transitionToEnd() }
+        }
     }
 }
