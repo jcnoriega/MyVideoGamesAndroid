@@ -2,7 +2,7 @@ package com.example.myvideogames.ui.gamedetail
 
 import com.airbnb.epoxy.TypedEpoxyController
 import com.example.myvideogames.data.GameTrailer
-import com.example.myvideogames.header
+//import com.example.myvideogames.header
 import com.example.myvideogames.ui.helpers.carouselBuilder
 import com.example.myvideogames.ui.simpleGameItem
 
@@ -11,10 +11,10 @@ class GameDetailsEpoxyController: TypedEpoxyController<List<GameTrailer>>() {
     var onGameSelected: ((GameTrailer) -> Unit) ? = null
 
     override fun buildModels(data: List<GameTrailer>) {
-        header {
-            id("header_trailers")
-            title("Trailers")
-        }
+//        header {
+//            id("header_trailers")
+//            title("Trailers")
+//        }
         carouselBuilder {
             id("carousel_trailers")
             data.forEach { trailer ->

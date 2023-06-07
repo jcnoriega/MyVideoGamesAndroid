@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myvideogames.data.Game
 import com.example.myvideogames.data.network.RAWGamesService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(): ViewModel() {
 
     private val gamesService: RAWGamesService = RAWGamesService.create()
     private val _games = MutableLiveData<List<Game>>()

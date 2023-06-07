@@ -1,11 +1,9 @@
 package com.example.myvideogames.ui
 
-import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.ViewParent
-import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyHolder

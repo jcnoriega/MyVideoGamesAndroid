@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myvideogames.data.GameTrailer
 
+
 class MainViewModel: ViewModel() {
 
     private val _collapsed = MutableLiveData(false)

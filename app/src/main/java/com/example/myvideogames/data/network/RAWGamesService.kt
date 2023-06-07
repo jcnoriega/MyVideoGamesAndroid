@@ -30,7 +30,8 @@ interface RAWGamesService {
         private const val BASE_URL = "https://api.rawg.io/api/"
 
         fun create(): RAWGamesService {
-            val logger = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+            val logger =
+                HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)
