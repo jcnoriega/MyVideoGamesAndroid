@@ -1,8 +1,7 @@
 package com.example.myvideogames.ui.gamedetail
 
 import com.airbnb.epoxy.TypedEpoxyController
-import com.example.myvideogames.data.GameTrailer
-//import com.example.myvideogames.header
+import com.example.myvideogames.data.model.GameTrailer
 import com.example.myvideogames.ui.helpers.carouselBuilder
 import com.example.myvideogames.ui.simpleGameItem
 

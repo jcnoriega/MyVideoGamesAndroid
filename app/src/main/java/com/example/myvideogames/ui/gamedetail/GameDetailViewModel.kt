@@ -5,19 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myvideogames.data.Game
-import com.example.myvideogames.data.GameDetail
-import com.example.myvideogames.data.GameTrailer
-import com.example.myvideogames.data.network.RAWGamesService
-import kotlinx.coroutines.Dispatchers
+import com.example.myvideogames.data.GamesRepository
+import com.example.myvideogames.data.model.Game
+import com.example.myvideogames.data.model.GameDetail
+import com.example.myvideogames.data.model.GameTrailer
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GameDetailViewModel(
+@HiltViewModel
+class GameDetailViewModel @Inject constructor(
+    private val gamesRepository: GamesRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val apiService = RAWGamesService.create() //TODO: inject with hilt
 
     private val game: Game? = savedStateHandle["game"]
 
@@ -30,11 +32,11 @@ class GameDetailViewModel(
     init {
         game?.also {
             viewModelScope.launch {
-                val gameDetailsDeferred = async(Dispatchers.IO) { apiService.getGameDetails(it.id) }
-                val gameTrailersDeferred  = async(Dispatchers.IO) { apiService.getGameTrailers(it.id) }
+                val gameDetailsDeferred = async { gamesRepository.getGameDetails(it.id) }
+                val gameTrailersDeferred = async { gamesRepository.getGameTrailers(it.id) }
 
                 _gameDetail.value = gameDetailsDeferred.await()
-                _gameTrailers.value = gameTrailersDeferred.await().results
+                _gameTrailers.value = gameTrailersDeferred.await()
             }
         }
 

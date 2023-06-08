@@ -17,7 +17,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.myvideogames.databinding.FragmentGameDetailBinding
 import com.example.myvideogames.ui.SimpleGameItem_
 import com.example.myvideogames.ui.mediaplayer.MediaPlayerContainerListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class GameDetailFragment : Fragment() {
 
     private val viewModel: GameDetailViewModel by viewModels()
@@ -39,7 +41,8 @@ class GameDetailFragment : Fragment() {
         Glide.with(requireContext())
             .load(args.game.backgroundImage)
             .apply(requestOptions)
-            .into(binding.gameDetailLogo)
+            .into(binding.
+            gameDetailLogo)
         //binding.lifecycleOwner = viewLifecycleOwner
 
         val recyclerView = binding.gameDetailRecyclerView

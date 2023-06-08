@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_game_detail" >
         <argument
             android:name="game"
-            app:argType="com.example.myvideogames.data.Game" />
+            app:argType="com.example.myvideogames.data.model.Game" />
     </fragment>
 
     <fragment

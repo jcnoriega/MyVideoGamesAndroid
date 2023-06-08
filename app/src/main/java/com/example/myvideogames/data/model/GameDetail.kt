@@ -1,4 +1,4 @@
-package com.example.myvideogames.data
+package com.example.myvideogames.data.model
 
 data class GameDetail(
     val id: String,
