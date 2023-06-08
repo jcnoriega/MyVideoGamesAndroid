@@ -15,6 +15,9 @@ class GameDetailsEpoxyController: TypedEpoxyController<List<GameTrailer>>() {
 //            id("header_trailers")
 //            title("Trailers")
 //        }
+        if (data.isEmpty()) {
+            return
+        }
         carouselBuilder {
             id("carousel_trailers")
             data.forEach { trailer ->

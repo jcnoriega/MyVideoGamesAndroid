@@ -5,6 +5,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -21,8 +22,11 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
 
     private lateinit var binding: ActivityMainBinding
     private var mediaPlayerFragment = MediaPlayerFragment.newInstance()
+    private lateinit var navController: NavController
 
-    private val onBackPressedCallback = object: OnBackPressedCallback(false) {
+    private var isCollapsed = false
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.onBackPressed()
         }
@@ -42,7 +46,8 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
             R.id.nav_host_fragment_activity_main
         ) as NavHostFragment
 
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -52,8 +57,9 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
         )
         //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
         observeTransition()
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
     }
 
     private fun observeTransition() {
@@ -65,8 +71,26 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
                 motionLayout.post { motionLayout.progress = 1f - it }
             }
         }
-        viewModel.collapsed.observe(this) { isCollapsed ->
-            onBackPressedCallback.isEnabled = !isCollapsed //we disable it is collapsed
+        // We have to make sure the transition is complete to avoid blank page
+        viewModel.collapsed.observe(this) {
+            isCollapsed = it
+            if (isCollapsed) {
+                binding.container.transitionToStart()
+            } else {
+                binding.container.transitionToEnd()
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.findFragmentByTag(MediaPlayerFragment.TAG)?.isVisible == true) {
+            if (isCollapsed) {
+                super.onBackPressed()
+            } else {
+                viewModel.onBackPressed()
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -79,7 +103,7 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
                 .commitAllowingStateLoss()
         }
         viewModel.setMediaSource(gameTrailer)
-        onBackPressedCallback.isEnabled = true
+        //onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         val motionLayout = binding.container
         if (ViewCompat.isLaidOut(motionLayout)) {
             motionLayout.transitionToEnd()

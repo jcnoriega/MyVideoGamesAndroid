@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApiModule {
+object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit() = RAWGamesService.create()

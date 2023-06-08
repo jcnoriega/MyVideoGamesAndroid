@@ -6,15 +6,14 @@
     <Transition
         motion:constraintSetStart="@id/play_screen_expanded_normal"
         motion:constraintSetEnd="@id/play_screen_minimized"
-        motion:duration="300"
+        motion:duration="250"
         app:motionInterpolator="easeInOut">
         <OnSwipe
             app:dragDirection="dragUp"
-            app:maxAcceleration="200"
+            app:maxAcceleration="300"
             app:touchAnchorId="@+id/player_background_view"
             app:touchAnchorSide="top"
             />
-
         <KeyFrameSet>
             <KeyAttribute
                 app:framePosition="100"
