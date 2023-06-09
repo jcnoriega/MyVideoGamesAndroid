@@ -39,7 +39,10 @@ class GameDetailViewModel @Inject constructor(
                 _gameTrailers.value = gameTrailersDeferred.await()
             }
         }
+    }
 
+    fun gameTrailerSelected(gameTrailer: GameTrailer) {
+        gamesRepository.selectGameTrailer(gameTrailer)
     }
 
 }

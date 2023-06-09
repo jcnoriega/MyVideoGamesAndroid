@@ -8,6 +8,8 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.motion.widget.MotionLayout.TransitionListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.example.myvideogames.MainViewModel
 import com.example.myvideogames.R
 import com.example.myvideogames.databinding.FragmentMediaPlayerBinding
@@ -37,7 +39,22 @@ class MediaPlayerFragment : Fragment() {
         fragmentMediaPlayerBinding = FragmentMediaPlayerBinding.inflate(inflater, container, false)
 
         setTransitionListener()
+        val player = ExoPlayer.Builder(requireContext()).build()
+        fragmentMediaPlayerBinding.playerView.player = player
+        viewModel.currentGameTrailer.observe(viewLifecycleOwner) {
+            it?.let { trailer ->
+                fragmentMediaPlayerBinding.audioNameTextView.text = trailer.name
+                fragmentMediaPlayerBinding.audioNameTextViewMin.text = trailer.name
 
+                trailer.data.small?.let { uri ->
+                    val mediaItem = MediaItem.fromUri(uri)
+                    player.setMediaItem(mediaItem)
+                    player.prepare()
+                    player.play()
+                }
+
+            }
+        }
 
         return fragmentMediaPlayerBinding.root
     }
@@ -77,7 +94,8 @@ class MediaPlayerFragment : Fragment() {
                 triggerId: Int,
                 positive: Boolean,
                 progress: Float
-            ) { }
+            ) {
+            }
 
         })
     }

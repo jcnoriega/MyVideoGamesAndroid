@@ -8,16 +8,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.myvideogames.data.model.GameTrailer
 import com.example.myvideogames.databinding.ActivityMainBinding
-import com.example.myvideogames.ui.mediaplayer.MediaPlayerContainerListener
 import com.example.myvideogames.ui.mediaplayer.MediaPlayerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var mediaPlayerFragment = MediaPlayerFragment.newInstance()
@@ -58,6 +56,34 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
             .replace(R.id.player_fragment, mediaPlayerFragment, MediaPlayerFragment.TAG)
             .hide(mediaPlayerFragment)
             .commitAllowingStateLoss()
+
+        viewModel.currentGameTrailer.observe(this) { gameTrailer ->
+            if (gameTrailer == null) {
+                hideMediaFragment()
+            } else {
+                showMediaFragment()
+            }
+        }
+    }
+
+    private fun hideMediaFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .hide(mediaPlayerFragment).commit()
+    }
+
+    private fun showMediaFragment() {
+        supportFragmentManager
+            .beginTransaction()
+            .show(mediaPlayerFragment).commit()
+        val motionLayout = binding.container
+        if (!isCollapsed) {
+            if (ViewCompat.isLaidOut(motionLayout)) {
+                motionLayout.transitionToEnd()
+            } else {
+                motionLayout.post { motionLayout.transitionToEnd() }
+            }
+        }
     }
 
     private fun observeTransition() {
@@ -90,22 +116,6 @@ class MainActivity : AppCompatActivity(), MediaPlayerContainerListener {
             }
         } else {
             super.onBackPressed()
-        }
-    }
-
-    override fun launchMediaPlayer(gameTrailer: GameTrailer) {
-
-        supportFragmentManager
-            .beginTransaction()
-            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-            .show(mediaPlayerFragment).commit()
-        viewModel.setMediaSource(gameTrailer)
-        //onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-        val motionLayout = binding.container
-        if (ViewCompat.isLaidOut(motionLayout)) {
-            motionLayout.transitionToEnd()
-        } else {
-            motionLayout.post { motionLayout.transitionToEnd() }
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.myvideogames.ui.gamedetail
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.myvideogames.databinding.FragmentGameDetailBinding
 import com.example.myvideogames.ui.SimpleGameItem_
-import com.example.myvideogames.ui.mediaplayer.MediaPlayerContainerListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,8 +26,6 @@ class GameDetailFragment : Fragment() {
 
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var mediaPlayerContainerListener: MediaPlayerContainerListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,8 +52,9 @@ class GameDetailFragment : Fragment() {
                 requestManager.asBitmap().apply(options).load(model.imageUrl)
             }
         )
+
         controller.onGameSelected = {
-            mediaPlayerContainerListener.launchMediaPlayer(it)
+            viewModel.gameTrailerSelected(it)
         }
 
         viewModel.gameTrailers.observe(viewLifecycleOwner) {
@@ -66,10 +63,4 @@ class GameDetailFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mediaPlayerContainerListener = requireActivity() as MediaPlayerContainerListener
-    }
-
 }
