@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.example.myvideogames.data.model.Game
 import com.example.myvideogames.databinding.FragmentHomeBinding
 import com.example.myvideogames.ui.SimpleGameItem_
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,9 +66,34 @@ class HomeFragment : Fragment() {
                 requestManager.asBitmap().apply(options).load(model.imageUrl)
             }
         )
+
         controller.onGameSelected = {
-            val directions = HomeFragmentDirections.actionNavigationHomeToGameDetailFragment(it)
-            findNavController().navigate(directions)
+            goToGameDetails(it)
+        }
+
+        viewModel.feed.observe(viewLifecycleOwner) { feed ->
+            controller.setData(feed)
+        }
+
+        return binding.root
+    }
+
+    private fun setUpHeaderView() {
+        binding.scrollView.setOnTouchListener { _, _ -> true }
+        fixHeaderPosition()
+        binding.appBar.addOnOffsetChangedListener { _, verticalOffset ->
+            //TODO: check 175 value
+            val minimumHeight = convertDpToPixel(175f) + binding.toolbar.height
+            val scrollRange = convertDpToPixel(350f) //TODO: check maximum height
+            val deltaY = 1 - (abs(verticalOffset).toFloat()) / scrollRange
+            val translateY = -(verticalOffset).toFloat() * 0.5f
+            if (scrollRange + verticalOffset >= minimumHeight.toInt()) {
+                binding.headerImage.scaleY = deltaY
+                binding.headerImage.scaleX = deltaY
+                binding.headerImage.translationY = translateY
+            } else {
+                binding.headerImage.scaleY = minimumHeight / scrollRange
+            }
         }
 
         viewModel.bestGame.observe(viewLifecycleOwner) { bestGame ->
@@ -95,49 +121,26 @@ class HomeFragment : Fragment() {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                            override fun onGlobalLayout() {
-                                setScrollPosition(binding.headerImage.width)
-                                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                            }
-                        })
+                        fixHeaderPosition()
                         return false
                     }
 
                 })
                 .into(binding.headerImage)
             binding.title.text = bestGame.name
+            binding.headerImage.setOnClickListener {
+                goToGameDetails(bestGame)
+            }
         }
-        viewModel.feed.observe(viewLifecycleOwner) { feed ->
-            controller.setData(feed)
-        }
-
-        return binding.root
     }
 
-    private fun setUpHeaderView() {
-        binding.scrollView.setOnTouchListener { _, _ -> true }
+    private fun fixHeaderPosition() {
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 setScrollPosition(binding.headerImage.width)
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
-
-        binding.appBar.addOnOffsetChangedListener { _, verticalOffset ->
-            //TODO: check 175 value
-            val minimumHeight = convertDpToPixel(175f) + binding.toolbar.height
-            val scrollRange = convertDpToPixel(350f) //TODO: check maximum height
-            val deltaY = 1 - (abs(verticalOffset).toFloat()) / scrollRange
-            val translateY = -(verticalOffset).toFloat() * 0.5f
-            if (scrollRange + verticalOffset >= minimumHeight.toInt()) {
-                binding.headerImage.scaleY = deltaY
-                binding.headerImage.scaleX = deltaY
-                binding.headerImage.translationY = translateY
-            } else {
-                binding.headerImage.scaleY = minimumHeight / scrollRange
-            }
-        }
     }
 
     private fun setScrollPosition(imageViewSize: Int) {
@@ -146,6 +149,11 @@ class HomeFragment : Fragment() {
         val widthScreen = displayMetrics.widthPixels
         val widthScroll = imageViewSize / 2
         binding.scrollView.scrollTo(widthScroll - (widthScreen / 2), 0)
+    }
+
+    private fun goToGameDetails(game: Game) {
+        val directions = HomeFragmentDirections.actionNavigationHomeToGameDetailFragment(game)
+        findNavController().navigate(directions)
     }
 
     private fun convertDpToPixel(dp: Float): Float {
