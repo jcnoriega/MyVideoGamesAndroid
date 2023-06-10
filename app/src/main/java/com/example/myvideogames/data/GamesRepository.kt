@@ -20,9 +20,16 @@ class GamesRepository @Inject constructor(
     private val _currentGameTrailer = MutableStateFlow<GameTrailer?>(null)
     val currentGameTrailer: StateFlow<GameTrailer?> get() = _currentGameTrailer
 
-    suspend fun getGames() : List<Game> {
+    suspend fun getTopGames() : List<Game> {
         return withContext(Dispatchers.IO) {
             val pagedResult = gamesService.getGames()
+            pagedResult.results
+        }
+    }
+
+    suspend fun getLatestGames() : List<Game> {
+        return withContext(Dispatchers.IO) {
+            val pagedResult = gamesService.getGames("released")
             pagedResult.results
         }
     }

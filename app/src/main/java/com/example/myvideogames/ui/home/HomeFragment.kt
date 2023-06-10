@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
 
         val recyclerView = binding.homeEpoxyRecyclerView
         recyclerView.setController(controller)
+        controller.setData(UiHomeFeed())
         recyclerView.addGlidePreloader(
             requestManager = Glide.with(requireContext()),
             preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->
@@ -63,8 +64,12 @@ class HomeFragment : Fragment() {
             findNavController().navigate(directions)
         }
 
-        viewModel.games.observe(viewLifecycleOwner) {
-            controller.setData(it)
+        viewModel.bestGame.observe(viewLifecycleOwner) { bestGame ->
+            Glide.with(requireContext()).load(bestGame.backgroundImage).into(binding.headerImage)
+            binding.title.text = bestGame.name
+        }
+        viewModel.feed.observe(viewLifecycleOwner) { feed ->
+            controller.setData(feed)
         }
 
         return binding.root
@@ -86,7 +91,7 @@ class HomeFragment : Fragment() {
         binding.appBar.addOnOffsetChangedListener { _, verticalOffset ->
             //TODO: check 175 value
             val minimumHeight = convertDpToPixel(175f) + binding.toolbar.height
-            val scrollRange = binding.headerImage.height
+            val scrollRange = convertDpToPixel(350f) //TODO: check maximum height
             val deltaY = 1 - (abs(verticalOffset).toFloat()) / scrollRange
             val translateY = -(verticalOffset).toFloat() * 0.5f
             if (scrollRange + verticalOffset >= minimumHeight.toInt()) {
