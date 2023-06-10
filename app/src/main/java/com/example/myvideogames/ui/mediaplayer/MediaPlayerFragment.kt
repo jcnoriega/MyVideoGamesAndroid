@@ -56,6 +56,13 @@ class MediaPlayerFragment : Fragment() {
             }
         }
 
+        viewModel.playVideo.observe(viewLifecycleOwner) {
+            player.stop()
+        }
+
+        fragmentMediaPlayerBinding.cancelButton.setOnClickListener { viewModel.cancelButtonPressed() }
+
+
         return fragmentMediaPlayerBinding.root
     }
 

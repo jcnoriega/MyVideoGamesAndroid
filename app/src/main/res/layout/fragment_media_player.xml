@@ -22,29 +22,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/top_frame_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:elevation="10dp"
-            android:outlineProvider="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/player_background_view">
-
-            <ImageView
-                android:id="@+id/collapse_image_view"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:elevation="10dp"
-                app:tint="@color/material_dynamic_neutral70"
-                app:srcCompat="@drawable/minus_sign" />
-        </FrameLayout>
-
         <TextView
             android:id="@+id/audio_name_text_view"
             android:layout_width="wrap_content"
@@ -52,34 +29,17 @@
             android:ellipsize="end"
             android:outlineProvider="none"
             android:paddingStart="16dp"
-            android:paddingTop="8dp"
+            android:paddingTop="16dp"
             android:paddingEnd="16dp"
-            android:singleLine="true"
             android:text="Grand Theft Auto V"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
+            android:maxLines="2"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/artist_name_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/player_view" />
 
-        <TextView
-            android:id="@+id/artist_name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:outlineProvider="none"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="Trailer"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/audio_name_text_view" />
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/player_view"
@@ -89,42 +49,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <View
+            android:id="@+id/divider_video"
+            app:layout_constraintTop_toBottomOf="@id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            android:background="@color/white"/>
 
         <TextView
             android:id="@+id/audio_name_text_view_min"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
             android:ellipsize="end"
             android:outlineProvider="none"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:singleLine="true"
+            android:maxLines="2"
             android:text="Grand Theft Auto V"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/prev_image_view"
             app:layout_constraintStart_toEndOf="@id/player_view"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/artist_name_text_view_min"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:elevation="10dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:outlineProvider="none"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="Trailer"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toStartOf="@id/prev_image_view"
-            app:layout_constraintStart_toEndOf="@id/player_view"
-            app:layout_constraintTop_toBottomOf="@id/audio_name_text_view_min" />
 
         <ImageView
             android:id="@+id/prev_image_view"
@@ -138,15 +85,6 @@
             app:srcCompat="@drawable/back"
             app:tint="@color/white"/>
 
-        <Space
-            android:id="@+id/play_pause_top_space"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/play_pause_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent=".03"
-            app:layout_constraintStart_toStartOf="parent" />
-
         <ImageView
             android:id="@+id/play_pause_layout"
             android:layout_width="32dp"
@@ -159,6 +97,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/pause"
+            app:tint="@color/white"/>
+
+        <ImageView
+            android:id="@+id/cancel_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:outlineProvider="none"
+            app:layout_constraintTop_toBottomOf="@id/player_background_view"
+            app:layout_constraintStart_toEndOf="@id/player_background_view"
+            app:srcCompat="@drawable/cancel"
             app:tint="@color/white"/>
 
         <Space

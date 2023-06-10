@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     private fun showMediaFragment() {
         supportFragmentManager
             .beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_bottom, R.anim.hold_still)
             .show(mediaPlayerFragment).commit()
         val motionLayout = binding.container
         if (!isCollapsed) {

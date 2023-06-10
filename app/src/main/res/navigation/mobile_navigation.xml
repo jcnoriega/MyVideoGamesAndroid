@@ -12,7 +12,10 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_gameDetailFragment"
-            app:destination="@id/gameDetailFragment" />
+            app:destination="@id/gameDetailFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/hold_still"
+            app:popExitAnim="@anim/exit_to_right" />
     </fragment>
     <fragment
         android:id="@+id/gameDetailFragment"
