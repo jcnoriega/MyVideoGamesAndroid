@@ -3,6 +3,8 @@ package com.example.myvideogames.ui.home
 import com.airbnb.epoxy.TypedEpoxyController
 import com.example.myvideogames.data.model.Game
 import com.example.myvideogames.ui.helpers.carouselBuilder
+import com.example.myvideogames.ui.helpers.gridCarousel
+import com.example.myvideogames.ui.helpers.gridCarouselBuilder
 import com.example.myvideogames.ui.listHeader
 import com.example.myvideogames.ui.simpleGameItem
 
@@ -35,7 +37,7 @@ class HomeFeedEpoxyController : TypedEpoxyController<UiHomeFeed>() {
                 id("top_games_header")
                 title("Latest Releases")
             }
-            carouselBuilder {
+            gridCarouselBuilder {
                 id("carousel_latest")
                 it.forEach { game ->
                     simpleGameItem {

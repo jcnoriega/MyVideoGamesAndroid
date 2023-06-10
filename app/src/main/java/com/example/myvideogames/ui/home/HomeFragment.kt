@@ -1,7 +1,9 @@
 package com.example.myvideogames.ui.home
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +15,12 @@ import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.example.myvideogames.databinding.FragmentHomeBinding
 import com.example.myvideogames.ui.SimpleGameItem_
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +71,41 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.bestGame.observe(viewLifecycleOwner) { bestGame ->
-            Glide.with(requireContext()).load(bestGame.backgroundImage).into(binding.headerImage)
+            val options = RequestOptions
+                .diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC)
+                .dontAnimate()
+            Glide.with(requireContext())
+                .load(bestGame.backgroundImage)
+                .apply(options)
+                .listener(object :RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        //do nothing for now
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                            override fun onGlobalLayout() {
+                                setScrollPosition(binding.headerImage.width)
+                                binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            }
+                        })
+                        return false
+                    }
+
+                })
+                .into(binding.headerImage)
             binding.title.text = bestGame.name
         }
         viewModel.feed.observe(viewLifecycleOwner) { feed ->
@@ -79,11 +119,7 @@ class HomeFragment : Fragment() {
         binding.scrollView.setOnTouchListener { _, _ -> true }
         binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                val displayMetrics = DisplayMetrics()
-                requireActivity().windowManager.defaultDisplay.getRealMetrics(displayMetrics)
-                val widthScreen = displayMetrics.widthPixels
-                val widthScroll = binding.headerImage.width / 2
-                binding.scrollView.scrollTo(widthScroll - (widthScreen / 2), 0)
+                setScrollPosition(binding.headerImage.width)
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
@@ -102,6 +138,14 @@ class HomeFragment : Fragment() {
                 binding.headerImage.scaleY = minimumHeight / scrollRange
             }
         }
+    }
+
+    private fun setScrollPosition(imageViewSize: Int) {
+        val displayMetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getRealMetrics(displayMetrics)
+        val widthScreen = displayMetrics.widthPixels
+        val widthScroll = imageViewSize / 2
+        binding.scrollView.scrollTo(widthScroll - (widthScreen / 2), 0)
     }
 
     private fun convertDpToPixel(dp: Float): Float {
