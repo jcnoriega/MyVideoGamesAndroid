@@ -1,6 +1,11 @@
 package com.example.myvideogames.ui.mediaplayer
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +32,17 @@ class MediaPlayerFragment : Fragment() {
         }
     }
 
+    private val connection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            if (service is MediaPlayerService.MediaPlayerBinder) {
+                fragmentMediaPlayerBinding.playerView.player = service.getExoPlayer()
+            }
+        }
+    }
+
     private val viewModel: MainViewModel by activityViewModels()
 
     private lateinit var fragmentMediaPlayerBinding: FragmentMediaPlayerBinding
@@ -39,31 +55,29 @@ class MediaPlayerFragment : Fragment() {
         fragmentMediaPlayerBinding = FragmentMediaPlayerBinding.inflate(inflater, container, false)
 
         setTransitionListener()
-        val player = ExoPlayer.Builder(requireContext()).build()
-        fragmentMediaPlayerBinding.playerView.player = player
         viewModel.currentGameTrailer.observe(viewLifecycleOwner) {
             it?.let { trailer ->
                 fragmentMediaPlayerBinding.audioNameTextView.text = trailer.name
                 fragmentMediaPlayerBinding.audioNameTextViewMin.text = trailer.name
-
                 trailer.data.small?.let { uri ->
-                    val mediaItem = MediaItem.fromUri(uri)
-                    player.setMediaItem(mediaItem)
-                    player.prepare()
-                    player.play()
+                    startMediaPlayerService(uri)
                 }
-
             }
         }
 
         viewModel.playVideo.observe(viewLifecycleOwner) {
-            player.stop()
+            //player.stop()
         }
 
         fragmentMediaPlayerBinding.cancelButton.setOnClickListener { viewModel.cancelButtonPressed() }
 
-
         return fragmentMediaPlayerBinding.root
+    }
+
+    private fun startMediaPlayerService(uri: String) {
+        val intent = Intent(requireContext(), MediaPlayerService::class.java)
+        intent.putExtra(MediaPlayerService.MEDIA_URI, uri)
+        requireActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
     private fun setTransitionListener() {

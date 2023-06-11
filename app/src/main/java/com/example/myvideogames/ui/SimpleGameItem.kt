@@ -21,7 +21,7 @@ abstract class SimpleGameItem: EpoxyModelWithHolder<SimpleGameHolder>() {
     override fun getDefaultLayout() = R.layout.home_simple_item
 
     @EpoxyAttribute
-    lateinit var imageUrl: String
+    var imageUrl: String? = null
     @EpoxyAttribute
     lateinit var name: String
     @EpoxyAttribute
@@ -29,7 +29,7 @@ abstract class SimpleGameItem: EpoxyModelWithHolder<SimpleGameHolder>() {
 
     override fun bind(holder: SimpleGameHolder) {
         holder.nameView.text = name
-        holder.glide.load(imageUrl).into(holder.imageView)
+        imageUrl?.let { holder.glide.load(it).into(holder.imageView) }
         holder.root.setOnClickListener(onClick)
     }
 }
