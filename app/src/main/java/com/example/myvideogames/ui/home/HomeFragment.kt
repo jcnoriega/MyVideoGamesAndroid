@@ -122,6 +122,7 @@ class HomeFragment : Fragment() {
                         isFirstResource: Boolean
                     ): Boolean {
                         fixHeaderPosition()
+                        finishLoading()
                         return false
                     }
 
@@ -132,6 +133,11 @@ class HomeFragment : Fragment() {
                 goToGameDetails(bestGame)
             }
         }
+    }
+
+    private fun finishLoading() {
+        binding.appBar.visibility = View.VISIBLE
+        binding.appBarLoading.visibility = View.INVISIBLE
     }
 
     private fun fixHeaderPosition() {

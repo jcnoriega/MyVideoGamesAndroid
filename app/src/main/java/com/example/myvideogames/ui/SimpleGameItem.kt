@@ -18,7 +18,26 @@ import com.google.android.material.imageview.ShapeableImageView
 abstract class SimpleGameItem: EpoxyModelWithHolder<SimpleGameHolder>() {
 
     //Annotation didn't work
-    override fun getDefaultLayout() = R.layout.home_simple_item
+    override fun getDefaultLayout() = R.layout.simple_item
+
+    @EpoxyAttribute
+    var imageUrl: String? = null
+    @EpoxyAttribute
+    lateinit var name: String
+    @EpoxyAttribute
+    lateinit var onClick: OnClickListener
+
+    override fun bind(holder: SimpleGameHolder) {
+        holder.nameView.text = name
+        imageUrl?.let { holder.glide.load(it).into(holder.imageView) }
+        holder.root.setOnClickListener(onClick)
+    }
+}
+
+@EpoxyModelClass
+abstract class GridSimpleItem: EpoxyModelWithHolder<SimpleGameHolder>()  {
+    //Annotation didn't work
+    override fun getDefaultLayout() = R.layout.grid_item
 
     @EpoxyAttribute
     var imageUrl: String? = null

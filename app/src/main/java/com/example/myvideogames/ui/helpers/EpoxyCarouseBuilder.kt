@@ -1,14 +1,18 @@
 package com.example.myvideogames.ui.helpers
 
 import android.content.Context
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.airbnb.epoxy.Carousel
 import com.airbnb.epoxy.CarouselModelBuilder
 import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.ModelCollector
 import com.airbnb.epoxy.ModelView
+import com.google.android.material.appbar.AppBarLayout
 
 /**
  * Example that illustrate how to add a builder for nested list (ex: carousel) that allow building
@@ -46,19 +50,25 @@ class EpoxyCarouselBuilder(
     }
 }
 
-@ModelView(saveViewState = true, autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
+@ModelView(saveViewState = true, autoLayout = ModelView.Size.WRAP_WIDTH_WRAP_HEIGHT)
 class GridCarousel(context: Context?) : Carousel(context) {
+
+    init {
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(this)
+    }
     override fun createLayoutManager(): LayoutManager {
         return GridLayoutManager(context, SPAN_COUNT, LinearLayoutManager.HORIZONTAL, false)
     }
 
     companion object {
-        private const val SPAN_COUNT = 2
+        private const val SPAN_COUNT = 4
     }
 }
 
 fun ModelCollector.gridCarouselBuilder(builder: EpoxyGridCarouselBuilder.() -> Unit): GridCarouselModel_ {
     val gridCarouselBuilder = EpoxyGridCarouselBuilder().apply { builder() }
+    gridCarouselBuilder.padding(Carousel.Padding.dp(8,0,48,0,8))
     add(gridCarouselBuilder.gridCarouselModel)
     return gridCarouselBuilder.gridCarouselModel
 }

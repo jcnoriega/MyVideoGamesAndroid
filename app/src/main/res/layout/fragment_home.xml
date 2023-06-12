@@ -7,8 +7,42 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     tools:context=".MainActivity">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/app_bar_loading"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:visibility="visible"
+        app:shimmer_auto_start="true"
+        android:clipChildren="true"
+        app:shimmer_repeat_delay="300">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#dddddd">
+            <View
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:background="#aaaaaa"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"/>
+            <View
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="#aaaaaa"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

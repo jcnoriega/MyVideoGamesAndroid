@@ -10,7 +10,7 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/thumbnail"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="125dp"
         app:layout_constraintDimensionRatio="4:3"
         android:background="@color/black"
         android:scaleType="centerCrop"
@@ -30,6 +30,8 @@
         android:text="@{text}"
         android:gravity="start"
         android:maxLines="1"
+        android:fontFamily="sans-serif-black"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/thumbnail"
         app:layout_constraintStart_toStartOf="@id/thumbnail"
         app:layout_constraintTop_toBottomOf="@id/thumbnail"
