@@ -70,6 +70,10 @@ class MediaPlayerService : Service(), Player.Listener {
         }
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        return super.onUnbind(intent)
+    }
+
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         if (!player.playWhenReady) {

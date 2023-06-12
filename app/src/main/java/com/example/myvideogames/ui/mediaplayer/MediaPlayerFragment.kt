@@ -67,7 +67,9 @@ class MediaPlayerFragment : Fragment() {
 
         fragmentMediaPlayerBinding.cancelButton.setOnClickListener {
             viewModel.cancelButtonPressed()
+            val intent = Intent(requireContext(), MediaPlayerService::class.java)
             requireActivity().unbindService(serviceConnection)
+            requireActivity().stopService(intent)
         }
 
         return fragmentMediaPlayerBinding.root
@@ -81,6 +83,7 @@ class MediaPlayerFragment : Fragment() {
             intent.putExtra(MediaPlayerService.MEDIA_TITLE, gameTrailer.name)
             requireActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
             requireActivity().startService(intent)
+            requireActivity()
         }
     }
 
