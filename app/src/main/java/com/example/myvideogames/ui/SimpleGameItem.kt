@@ -13,6 +13,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.preload.Preloadable
 import com.bumptech.glide.Glide
 import com.example.myvideogames.R
+import com.example.myvideogames.ui.helpers.loadImage
 import com.google.android.material.imageview.ShapeableImageView
 
 @EpoxyModelClass
@@ -49,7 +50,7 @@ abstract class GridSimpleItem: EpoxyModelWithHolder<SimpleGameHolder>()  {
 
     override fun bind(holder: SimpleGameHolder) {
         holder.nameView.text = name
-        imageUrl?.let { holder.glide.load(it).into(holder.imageView) }
+        imageUrl?.let { holder.glide.loadImage(it, true).into(holder.imageView) }
         holder.root.setOnClickListener(onClick)
     }
 }

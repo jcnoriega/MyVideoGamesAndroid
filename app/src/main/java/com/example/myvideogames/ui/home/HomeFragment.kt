@@ -24,6 +24,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.myvideogames.data.model.Game
 import com.example.myvideogames.databinding.FragmentHomeBinding
 import com.example.myvideogames.ui.SimpleGameItem_
+import com.example.myvideogames.ui.helpers.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
@@ -60,10 +61,7 @@ class HomeFragment : Fragment() {
         recyclerView.addGlidePreloader(
             requestManager = Glide.with(requireContext()),
             preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->
-                val options = RequestOptions
-                    .diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC)
-                    .dontAnimate()
-                requestManager.asBitmap().apply(options).load(model.imageUrl)
+                requestManager.loadImage(model.imageUrl(), true)
             }
         )
 

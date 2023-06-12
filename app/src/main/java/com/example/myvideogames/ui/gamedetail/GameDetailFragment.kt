@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.myvideogames.databinding.FragmentGameDetailBinding
 import com.example.myvideogames.ui.SimpleGameItem_
+import com.example.myvideogames.ui.helpers.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,16 +34,14 @@ class GameDetailFragment : Fragment() {
     ): View {
         _binding = FragmentGameDetailBinding.inflate(inflater, container, false)
         binding.name = args.game.name
-        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
         Glide.with(requireContext())
-            .load(args.game.backgroundImage)
-            .apply(requestOptions)
+            .loadImage(args.game.backgroundImage, true)
             .into(binding.
             gameDetailLogo)
-        //binding.lifecycleOwner = viewLifecycleOwner
 
         val recyclerView = binding.gameDetailRecyclerView
         recyclerView.setController(controller)
+        controller.setData(emptyList())
         recyclerView.addGlidePreloader(
             requestManager = Glide.with(requireContext()),
             preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->
