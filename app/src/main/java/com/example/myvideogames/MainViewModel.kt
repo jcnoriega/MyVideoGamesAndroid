@@ -28,9 +28,6 @@ class MainViewModel @Inject constructor(
     private val _currentGameTrailer = MutableLiveData<GameTrailer?>(null)
     var currentGameTrailer: LiveData<GameTrailer?> = _currentGameTrailer
 
-    private val _playVideo = MutableLiveData<Boolean>()
-    val playVideo: LiveData<Boolean> = _playVideo
-
     init {
         viewModelScope.launch {
             gamesRepository.currentGameTrailer.collect {
@@ -59,7 +56,6 @@ class MainViewModel @Inject constructor(
     }
 
     fun cancelButtonPressed() {
-        _playVideo.value = false
         gamesRepository.removeCurrentGameTrailer()
     }
 }

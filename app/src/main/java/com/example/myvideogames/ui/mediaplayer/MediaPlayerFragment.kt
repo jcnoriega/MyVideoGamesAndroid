@@ -17,6 +17,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.myvideogames.MainViewModel
 import com.example.myvideogames.R
+import com.example.myvideogames.data.model.GameTrailer
 import com.example.myvideogames.databinding.FragmentMediaPlayerBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,7 +33,7 @@ class MediaPlayerFragment : Fragment() {
         }
     }
 
-    private val connection = object : ServiceConnection {
+    private val serviceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
         }
 
@@ -59,25 +60,27 @@ class MediaPlayerFragment : Fragment() {
             it?.let { trailer ->
                 fragmentMediaPlayerBinding.audioNameTextView.text = trailer.name
                 fragmentMediaPlayerBinding.audioNameTextViewMin.text = trailer.name
-                trailer.data.small?.let { uri ->
-                    startMediaPlayerService(uri)
-                }
+                startMediaPlayerService(trailer)
             }
         }
 
-        viewModel.playVideo.observe(viewLifecycleOwner) {
-            //player.stop()
+        fragmentMediaPlayerBinding.cancelButton.setOnClickListener {
+            viewModel.cancelButtonPressed()
+            requireActivity().unbindService(serviceConnection)
         }
-
-        fragmentMediaPlayerBinding.cancelButton.setOnClickListener { viewModel.cancelButtonPressed() }
 
         return fragmentMediaPlayerBinding.root
     }
 
-    private fun startMediaPlayerService(uri: String) {
-        val intent = Intent(requireContext(), MediaPlayerService::class.java)
-        intent.putExtra(MediaPlayerService.MEDIA_URI, uri)
-        requireActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE)
+    private fun startMediaPlayerService(gameTrailer: GameTrailer) {
+        gameTrailer.data.small?.let { uri->
+            val intent = Intent(requireContext(), MediaPlayerService::class.java)
+            intent.putExtra(MediaPlayerService.MEDIA_URI, uri)
+            intent.putExtra(MediaPlayerService.MEDIA_IMG, gameTrailer.preview)
+            intent.putExtra(MediaPlayerService.MEDIA_TITLE, gameTrailer.name)
+            requireActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            requireActivity().startService(intent)
+        }
     }
 
     private fun setTransitionListener() {
