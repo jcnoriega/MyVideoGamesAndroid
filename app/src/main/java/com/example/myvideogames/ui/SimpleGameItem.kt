@@ -7,6 +7,7 @@ import android.view.ViewParent
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyHolder
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.preload.Preloadable
@@ -51,6 +52,11 @@ abstract class GridSimpleItem: EpoxyModelWithHolder<SimpleGameHolder>()  {
         imageUrl?.let { holder.glide.load(it).into(holder.imageView) }
         holder.root.setOnClickListener(onClick)
     }
+}
+
+@EpoxyModelClass
+abstract class ShimmerSimpleItem: EpoxyModel<Any>()  {
+    override fun getDefaultLayout() = R.layout.simple_item_shimmer
 }
 
 class SimpleGameHolder(parent: ViewParent) : EpoxyHolder(), Preloadable {

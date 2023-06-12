@@ -32,6 +32,7 @@ import com.google.android.material.appbar.AppBarLayout
 fun ModelCollector.carouselBuilder(builder: EpoxyCarouselBuilder.() -> Unit): CarouselModel_ {
     Carousel.setDefaultGlobalSnapHelperFactory(null)
     val carouselBuilder = EpoxyCarouselBuilder().apply { builder() }
+
     add(carouselBuilder.carouselModel)
     return carouselBuilder.carouselModel
 }
@@ -56,6 +57,7 @@ class GridCarousel(context: Context?) : Carousel(context) {
     init {
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(this)
+        isNestedScrollingEnabled = false
     }
     override fun createLayoutManager(): LayoutManager {
         return GridLayoutManager(context, SPAN_COUNT, LinearLayoutManager.HORIZONTAL, false)

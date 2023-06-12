@@ -7,6 +7,7 @@ import android.view.ViewParent
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyHolder
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.airbnb.epoxy.preload.Preloadable
@@ -26,6 +27,11 @@ abstract class ListHeader: EpoxyModelWithHolder<HeaderHolder>() {
     override fun bind(holder: HeaderHolder) {
         holder.titleView.text = title
     }
+}
+
+@EpoxyModelClass
+abstract class ShimmerListHeader: EpoxyModel<Any>() {
+    override fun getDefaultLayout() = R.layout.shimmer_home_header
 }
 
 class HeaderHolder(parent: ViewParent) : EpoxyHolder() {

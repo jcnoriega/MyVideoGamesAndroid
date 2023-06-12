@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
 
         val recyclerView = binding.homeEpoxyRecyclerView
         recyclerView.setController(controller)
-        controller.setData(UiHomeFeed())
+        controller.setData(null)
         recyclerView.addGlidePreloader(
             requestManager = Glide.with(requireContext()),
             preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->

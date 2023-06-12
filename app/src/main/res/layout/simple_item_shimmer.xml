@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:shimmer_auto_start="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/simple_item_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="125dp"
+            android:background="@color/black"
+            android:scaleType="centerCrop"
+            android:alpha="0.25"
+            app:layout_constraintDimensionRatio="4:3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/rounded_corner" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@color/black"
+            android:ellipsize="end"
+            android:alpha="0.25"
+            android:fontFamily="sans-serif-black"
+            android:gravity="start"
+            android:maxLines="1"
+            android:layout_marginTop="8dp"
+            android:text="          "
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/thumbnail"
+            app:layout_constraintStart_toStartOf="@id/thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/thumbnail"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="        " />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
