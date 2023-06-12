@@ -34,15 +34,17 @@ class GameDetailViewModel @Inject constructor(
             viewModelScope.launch {
                 val gameDetailsDeferred = async { gamesRepository.getGameDetails(it.id) }
                 val gameTrailersDeferred = async { gamesRepository.getGameTrailers(it.id) }
+                val gameAdditionsDeferred = async { gamesRepository.getGameAdditions(it.id) }
 
                 val gameDetailsResponse = gameDetailsDeferred.await()
                 val gameTrailersResponse = gameTrailersDeferred.await()
+                val gameAdditionsResponse = gameAdditionsDeferred.await()
 
                 val uiGameDetails = UiGameDetails(
                     gameDetailsResponse.rating,
                     UiGameDescription(gameDetailsResponse.description),
                     gameTrailersResponse,
-                    emptyList()
+                    gameAdditionsResponse
                 )
                 _gameDetail.value = uiGameDetails
             }

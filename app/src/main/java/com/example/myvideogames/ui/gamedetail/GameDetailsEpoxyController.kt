@@ -61,14 +61,16 @@ class GameDetailsEpoxyController: TypedEpoxyController<UiGameDetails?>() {
                 }
             }
         } ?: run {
-            shimmerListHeader {
-                id("shimmer_list_header1")
-            }
-            carouselBuilder {
-                id("carousel_shimmer1")
-                repeat(5) {
-                    shimmerSimpleItem {
-                        id("1$it")
+            repeat(3) {
+                shimmerListHeader {
+                    id("shimmer_list_header$it")
+                }
+                carouselBuilder {
+                    id("carousel_shimmer$it")
+                    repeat(5) { it1 ->
+                        shimmerSimpleItem {
+                            id("$it1$it")
+                        }
                     }
                 }
             }

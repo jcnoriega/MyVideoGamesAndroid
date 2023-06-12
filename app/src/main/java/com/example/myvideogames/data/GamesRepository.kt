@@ -1,7 +1,5 @@
 package com.example.myvideogames.data
 
-import com.example.myvideogames.data.model.Game
-import com.example.myvideogames.data.model.GameDetail
 import com.example.myvideogames.data.model.GameTrailer
 import com.example.myvideogames.data.network.RAWGamesApi
 import kotlinx.coroutines.Dispatchers
@@ -20,18 +18,22 @@ class GamesRepository @Inject constructor(
     private val _currentGameTrailer = MutableStateFlow<GameTrailer?>(null)
     val currentGameTrailer: StateFlow<GameTrailer?> get() = _currentGameTrailer
 
-    suspend fun getTopGames() : List<Game> {
-        return withContext(Dispatchers.IO) {
-            val pagedResult = gamesService.getGames()
-            pagedResult.results
-        }
+    suspend fun getTopGames() = withContext(Dispatchers.IO) {
+        val pagedResult = gamesService.getGames()
+        pagedResult.results
     }
 
-    suspend fun getLatestGames() : List<Game> {
-        return withContext(Dispatchers.IO) {
-            val pagedResult = gamesService.getGames("released")
-            pagedResult.results
-        }
+    suspend fun getLatestGames() = withContext(Dispatchers.IO) {
+        val pagedResult = gamesService.getGames("released")
+        pagedResult.results
+    }
+
+    suspend fun getGameAdditions(id: String) = withContext(Dispatchers.IO) {
+        gamesService.getGameAdditions(id).results
+    }
+
+    suspend fun getGameDetails(id: String) = withContext(Dispatchers.IO) {
+        gamesService.getGameDetails(id)
     }
 
     fun selectGameTrailer(gameTrailer: GameTrailer) {
@@ -42,11 +44,6 @@ class GamesRepository @Inject constructor(
         _currentGameTrailer.value = null
     }
 
-    suspend fun getGameDetails(id: String): GameDetail {
-        return withContext(Dispatchers.IO) {
-            gamesService.getGameDetails(id)
-        }
-    }
 
     suspend fun getGameTrailers(id: String): List<GameTrailer> {
         return withContext(Dispatchers.IO) {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
@@ -57,7 +58,8 @@ class GameDetailFragment : Fragment() {
         }
 
         controller.onAdditionSelected = {
-
+            val directions = GameDetailFragmentDirections.actionGameDetailFragmentSelf(it)
+            findNavController().navigate(directions)
         }
 
         viewModel.gameDetail.observe(viewLifecycleOwner) {

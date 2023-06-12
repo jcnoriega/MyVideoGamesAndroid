@@ -12,6 +12,9 @@ interface RAWGamesApi {
     @GET(value = "games")
     suspend fun getGames(@Query("ordering") order: String? = null): PagedResponse<Game>
 
+    @GET(value = "games/{id}/additions")
+    suspend fun getGameAdditions(@Path("id") id: String): PagedResponse<Game>
+
     @GET(value = "games/{id}")
     suspend fun getGameDetails(@Path("id") id: String): GameDetail
 
