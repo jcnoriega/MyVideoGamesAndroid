@@ -23,8 +23,8 @@ class GameDetailViewModel @Inject constructor(
 
     private val game: Game? = savedStateHandle["game"]
 
-    private val _gameDetail = MutableLiveData<GameDetail>()
-    val gameDetail: LiveData<GameDetail> = _gameDetail
+    private val _gameDetail = MutableLiveData<UiGameDetails>()
+    val gameDetail: LiveData<UiGameDetails> = _gameDetail
 
     private val _gameTrailers = MutableLiveData<List<GameTrailer>>()
     val gameTrailers: LiveData<List<GameTrailer>> = _gameTrailers
@@ -35,8 +35,16 @@ class GameDetailViewModel @Inject constructor(
                 val gameDetailsDeferred = async { gamesRepository.getGameDetails(it.id) }
                 val gameTrailersDeferred = async { gamesRepository.getGameTrailers(it.id) }
 
-                _gameDetail.value = gameDetailsDeferred.await()
-                _gameTrailers.value = gameTrailersDeferred.await()
+                val gameDetailsResponse = gameDetailsDeferred.await()
+                val gameTrailersResponse = gameTrailersDeferred.await()
+
+                val uiGameDetails = UiGameDetails(
+                    gameDetailsResponse.rating,
+                    UiGameDescription(gameDetailsResponse.description),
+                    gameTrailersResponse,
+                    emptyList()
+                )
+                _gameDetail.value = uiGameDetails
             }
         }
     }

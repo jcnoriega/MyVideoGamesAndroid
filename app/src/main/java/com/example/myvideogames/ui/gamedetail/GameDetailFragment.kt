@@ -41,7 +41,7 @@ class GameDetailFragment : Fragment() {
 
         val recyclerView = binding.gameDetailRecyclerView
         recyclerView.setController(controller)
-        controller.setData(emptyList())
+        controller.setData(null)
         recyclerView.addGlidePreloader(
             requestManager = Glide.with(requireContext()),
             preloader = glidePreloader { requestManager: RequestManager, model: SimpleGameItem_, _ ->
@@ -52,11 +52,15 @@ class GameDetailFragment : Fragment() {
             }
         )
 
-        controller.onGameSelected = {
+        controller.onTrailerSelected = {
             viewModel.gameTrailerSelected(it)
         }
 
-        viewModel.gameTrailers.observe(viewLifecycleOwner) {
+        controller.onAdditionSelected = {
+
+        }
+
+        viewModel.gameDetail.observe(viewLifecycleOwner) {
             controller.setData(it)
         }
 
